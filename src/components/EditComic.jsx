@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-export default function AddComic() {
+export default function EditComic() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -12,6 +13,13 @@ export default function AddComic() {
     image: ""
   });
 
+  useEffect(() => {
+    fetch(`http://localhost:5000/comics/${id}`)
+      .then(res => res.json())
+      .then(data => setFormData(data))
+      .catch(err => console.error("Error loading comic:", err));
+  }, [id]);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,47 +27,50 @@ export default function AddComic() {
     });
   };
 
-  const currentYear = new Date().getFullYear();
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
 
     reader.onloadend = () => {
       setFormData({ ...formData, image: reader.result });
     };
 
-    if (file) {
-      reader.readAsDataURL(file); 
-    }
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/comics", {
-      method: "POST",
+    const res = await fetch(`http://localhost:5000/comics/${id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
     if (res.ok) {
-      alert("Comic added!");
+      alert("Comic updated!");
       navigate("/");
+    } else {
+      alert("Error updating comic.");
     }
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="container">
-      <h1 className="text-center mb-4">Add a New Comic</h1>
+      <h1 className="text-center mb-4">Edit Comic</h1>
 
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-        
+
         <div className="mb-3">
           <label className="form-label">Title</label>
           <input
             name="title"
             className="form-control"
+            value={formData.title}
             onChange={handleChange}
             required
           />
@@ -71,8 +82,8 @@ export default function AddComic() {
             name="issue"
             type="number"
             className="form-control"
+            value={formData.issue}
             onChange={handleChange}
-            min="0"
             required
           />
         </div>
@@ -82,19 +93,22 @@ export default function AddComic() {
           <input
             name="publisher"
             className="form-control"
+            value={formData.publisher}
             onChange={handleChange}
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Published Year</label>
+          <label className="form-label">Year</label>
           <input
             name="year"
             type="number"
             className="form-control"
+            value={formData.year}
             onChange={handleChange}
             min="1900"
             max={currentYear}
+            required
           />
         </div>
 
@@ -103,7 +117,7 @@ export default function AddComic() {
           <input
             type="file"
             accept="image/*"
-            capture="environment"   
+            capture="environment"
             className="form-control"
             onChange={handleImageUpload}
           />
@@ -119,7 +133,7 @@ export default function AddComic() {
         )}
 
         <button className="btn btn-primary w-100" type="submit">
-          Add Comic
+          Save Changes
         </button>
       </form>
     </div>

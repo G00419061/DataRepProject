@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ComicList() {
   const [comics, setComics] = useState([]);
@@ -12,12 +13,13 @@ export default function ComicList() {
       method: "DELETE"
     });
 
-    if(res.ok){
+    if (res.ok) {
       setComics(comics.filter((comic) => comic._id !== id));
-    }else{
+    } else {
       alert("Failed to delete comic.")
     }
   }
+  const navigate = useNavigate();
 
 
 
@@ -71,7 +73,14 @@ export default function ComicList() {
 
               <div className="card-footer bg-trasparent border-0">
                 <button
-                  className="btn btn-danger w-100"
+                  className="btn btn-secondary w-50"
+                  onClick={() => navigate(`/edit/${comic._id}`)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="btn btn-danger w-50"
                   onClick={() => handleDelete(comic._id)}
                 >
                   Delete
