@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const ComicSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  issue: { type: Number, required: true },
+  title: String,
+  issue: Number,
   publisher: String
 });
 
-export default mongoose.model("Comic", ComicSchema, "ComicStash");
+export default mongoose.model("Comic", ComicSchema, "comics");

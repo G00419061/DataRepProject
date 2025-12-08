@@ -10,18 +10,20 @@ app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ Mongo connection error:", err));
+  .then(() => console.log("✅ Connected to MongoDB (ComicStash DB)"))
+  .catch(err => console.error("❌ MongoDB Error:", err));
+
 
 app.get("/comics", async (req, res) => {
   const comics = await Comic.find();
   res.json(comics);
 });
 
+
 app.post("/comics", async (req, res) => {
-  const comic = new Comic(req.body);
-  await comic.save();
-  res.json(comic);
+  const newComic = new Comic(req.body);
+  await newComic.save();
+  res.json(newComic);
 });
 
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));

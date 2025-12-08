@@ -21,21 +21,25 @@ export default function ComicList() {
 
   return (
     <div className="container">
-      <h1 className="text-center mb-4">Comic List</h1>
+      <h1 className="text-center mb-4">My Collection</h1>
 
-      {comics.length === 0 ? (
-        <p className="text-center">No comics found.</p>
-      ) : (
-        <div className="list-group">
-          {comics.map((comic) => (
-            <div key={comic._id} className="list-group-item">
-              <h5>{comic.title}</h5>
-              <p>Issue: {comic.issue}</p>
-              <p>Publisher: {comic.publisher}</p>
+      <div className="row g-4">
+        {comics.map((comic) => (
+          <div key={comic._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div className="card shadow-sm h-100">
+
+              <div className="card-body">
+                <h5 className="card-title">{comic.title}</h5>
+                <p className="card-text">
+                  <strong>Issue:</strong> {comic.issue} <br />
+                  <strong>Publisher:</strong> {comic.publisher}
+                </p>
+              </div>
+
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
