@@ -8,6 +8,7 @@ export default function AddComic() {
     title: "",
     issue: "",
     publisher: "",
+    year: "",
     image: ""
   });
 
@@ -18,7 +19,8 @@ export default function AddComic() {
     });
   };
 
-  // Convert selected file to Base64 string
+  const currentYear = new Date().getFullYear();
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -28,7 +30,7 @@ export default function AddComic() {
     };
 
     if (file) {
-      reader.readAsDataURL(file); // Convert image → Base64
+      reader.readAsDataURL(file); 
     }
   };
 
@@ -53,7 +55,6 @@ export default function AddComic() {
 
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         
-        {/* TITLE */}
         <div className="mb-3">
           <label className="form-label">Title</label>
           <input
@@ -64,7 +65,6 @@ export default function AddComic() {
           />
         </div>
 
-        {/* ISSUE */}
         <div className="mb-3">
           <label className="form-label">Issue</label>
           <input
@@ -76,7 +76,6 @@ export default function AddComic() {
           />
         </div>
 
-        {/* PUBLISHER */}
         <div className="mb-3">
           <label className="form-label">Publisher</label>
           <input
@@ -86,19 +85,29 @@ export default function AddComic() {
           />
         </div>
 
-        {/* CAMERA INPUT */}
+        <div className="mb-3">
+          <label className="form-label">Published Year</label>
+          <input
+            name="year"
+            type="number"
+            className="form-control"
+            onChange={handleChange}
+            min="1900"
+            max={currentYear}
+          />
+        </div>
+
         <div className="mb-3">
           <label className="form-label">Cover Image</label>
           <input
             type="file"
             accept="image/*"
-            capture="environment"   // ← Automatically opens phone camera
+            capture="environment"   
             className="form-control"
             onChange={handleImageUpload}
           />
         </div>
 
-        {/* PREVIEW */}
         {formData.image && (
           <img
             src={formData.image}

@@ -64,6 +64,7 @@ export default function ComicList() {
 
                 <p className="card-text">
                   <strong>Issue:</strong> {comic.issue} <br />
+                  <strong>Published Year:</strong> {comic.year} <br />
                   <strong>Publisher:</strong> {comic.publisher}
                 </p>
               </div>

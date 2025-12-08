@@ -14,8 +14,8 @@ app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB (ComicStash DB)"))
-  .catch(err => console.error("❌ MongoDB Error:", err));
+  .then(() => console.log("Connected to MongoDB (ComicStash DB)"))
+  .catch(err => console.error("MongoDB Error:", err));
 
 
 app.get("/comics", async (req, res) => {
@@ -30,7 +30,7 @@ app.post("/comics", async (req, res) => {
     await newComic.save();
     res.json(newComic);
   } catch (err) {
-    console.error("❌ Error saving comic:", err);
+    console.error("Error saving comic:", err);
     res.status(400).json({ error: "Failed to save comic" });
   }
 });
@@ -45,4 +45,4 @@ app.delete("/comics/:id", async (req, res) =>{
   }
 });
 
-app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+app.listen(5000, () => console.log("Server running on port 5000"));

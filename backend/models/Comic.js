@@ -4,7 +4,8 @@ const ComicSchema = new mongoose.Schema({
   title: String,
   issue: Number,
   publisher: String,
-  image: String
+  image: String,
+  year: Number
 });
 
 export default mongoose.model("Comic", ComicSchema, "comics");
