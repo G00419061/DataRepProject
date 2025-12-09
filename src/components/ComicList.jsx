@@ -4,28 +4,30 @@ import { useNavigate } from "react-router-dom";
 export default function ComicList() {
   const [comics, setComics] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const [sortBy, setSortBy] = useState("latest");
+  const [searchTerm, setSearchTerm] = useState("");
+
+
+  const getCreatedAtFromId = (comic) =>
+    new Date(parseInt(comic._id.substring(0, 8), 16) * 1000);
+
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this comic from your collection?")) {
       return;
     }
 
     const res = await fetch(`http://localhost:5000/comics/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
     });
 
     if (res.ok) {
       setComics(comics.filter((comic) => comic._id !== id));
     } else {
-      alert("Failed to delete comic.")
+      alert("Failed to delete comic.");
     }
-  }
-  const navigate = useNavigate();
-  const [sortBy, setSortBy] = useState("latest");
-  const getCreatedAtFromId = (comic) => {
-    return new Date(parseInt(comic._id.substring(0, 8), 16) * 1000);
   };
-
-
 
   useEffect(() => {
     fetch("http://localhost:5000/comics")
@@ -44,9 +46,8 @@ export default function ComicList() {
 
   const sortedComics = [...comics].sort((a, b) => {
     switch (sortBy) {
-
       case "latest":
-      return getCreatedAtFromId(b) - getCreatedAtFromId(a);
+        return getCreatedAtFromId(b) - getCreatedAtFromId(a); 
 
       case "alphabetical":
         return a.title.localeCompare(b.title);
@@ -63,12 +64,26 @@ export default function ComicList() {
   });
 
 
+  const filteredComics = sortedComics.filter((comic) =>
+    comic.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="container">
       <h1 className="text-center mb-4">My Collection</h1>
-      <div className="d-flex justify-content-end mb-3">
+
+      <div className="d-flex justify-content-between align-items-center mb-3">
+
+        <input
+          type="text"
+          className="form-control w-50"
+          placeholder="Search by Title"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
         <select
-          className="form-select w-auto"
+          className="form-select w-auto ms-3"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
@@ -79,10 +94,8 @@ export default function ComicList() {
         </select>
       </div>
 
-
       <div className="row g-4">
-        {sortedComics.map((comic) => (
-
+        {filteredComics.map((comic) => (
           <div key={comic._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
             <div className="card shadow-sm h-100">
 
@@ -95,10 +108,9 @@ export default function ComicList() {
                     objectFit: "contain",
                     height: "250px",
                     backgroundColor: "#f8f9fa",
-                    padding: "8px"
+                    padding: "8px",
                   }}
                 />
-
               )}
 
               <div className="card-body">
@@ -115,16 +127,19 @@ export default function ComicList() {
                   {[0, 1, 2, 3, 4].map((i) => (
                     <span
                       key={i}
-                      style={{ color: i < comic.quality ? "#ffc107" : "#e4e5e9", fontSize: "1.4rem" }}
+                      style={{
+                        color: i < comic.quality ? "#ffc107" : "#e4e5e9",
+                        fontSize: "1.4rem",
+                      }}
                     >
                       ★
                     </span>
                   ))}
                 </div>
-
               </div>
 
-              <div className="card-footer bg-trasparent border-0">
+              {/* Edit/Delete Buttons */}
+              <div className="card-footer bg-transparent border-0 d-flex gap-2">
                 <button
                   className="btn btn-secondary w-50"
                   onClick={() => navigate(`/edit/${comic._id}`)}
@@ -138,7 +153,6 @@ export default function ComicList() {
                 >
                   Delete
                 </button>
-
               </div>
 
             </div>
