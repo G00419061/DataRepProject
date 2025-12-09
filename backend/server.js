@@ -35,13 +35,13 @@ app.post("/comics", async (req, res) => {
   }
 });
 
-app.delete("/comics/:id", async (req, res) =>{
-  try{
+app.delete("/comics/:id", async (req, res) => {
+  try {
     await Comic.findByIdAndDelete(req.params.id);
-    res.json({success: true});
-  }catch (err){
-    console.error("Error deleting comic:". err);
-    res.status(400).json({error: "Failed to delete comic"})
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting comic:".err);
+    res.status(400).json({ error: "Failed to delete comic" })
   }
 });
 
@@ -54,5 +54,18 @@ app.get("/comics/:id", async (req, res) => {
   }
 });
 
+
+app.put("/comics/:id", async (req, res) => {
+  try {
+    const updatedComic = await Comic.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedComic);
+  } catch (err) {
+    res.status(400).json({ error: "Error updating comic" });
+  }
+});
 
 app.listen(5000, () => console.log("Server running on port 5000"));

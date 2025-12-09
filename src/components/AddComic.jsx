@@ -115,7 +115,7 @@ export default function AddComic() {
             {[0, 1, 2, 3, 4].map((i) => (
               <span
                 key={i}
-                onClick={() => setFormData({ ...formData, quality: i + 1 })}
+                onClick={() => setFormData({ ...formData, quality: Number(i + 1) })}
                 style={{ color: i < formData.quality ? "#ffc107" : "#e4e5e9" }}
               >
                 ★

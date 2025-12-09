@@ -80,7 +80,6 @@ export default function EditComic() {
             className="form-control"
             value={formData.issue}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -104,7 +103,6 @@ export default function EditComic() {
             onChange={handleChange}
             min="1900"
             max={currentYear}
-            required
           />
         </div>
 
@@ -114,7 +112,7 @@ export default function EditComic() {
             {[0, 1, 2, 3, 4].map((i) => (
               <span
                 key={i}
-                onClick={() => setFormData({ ...formData, quality: i + 1 })}
+                onClick={() => setFormData({ ...formData, quality: Number(i + 1) })}
                 style={{ color: i < formData.quality ? "#ffc107" : "#e4e5e9" }}
               >
                 ★
