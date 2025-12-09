@@ -20,6 +20,10 @@ export default function ComicList() {
     }
   }
   const navigate = useNavigate();
+  const [sortBy, setSortBy] = useState("latest");
+  const getCreatedAtFromId = (comic) => {
+    return new Date(parseInt(comic._id.substring(0, 8), 16) * 1000);
+  };
 
 
 
@@ -38,12 +42,47 @@ export default function ComicList() {
 
   if (loading) return <h2 className="text-center mt-5">Loading comics...</h2>;
 
+  const sortedComics = [...comics].sort((a, b) => {
+    switch (sortBy) {
+
+      case "latest":
+      return getCreatedAtFromId(b) - getCreatedAtFromId(a);
+
+      case "alphabetical":
+        return a.title.localeCompare(b.title);
+
+      case "rating":
+        return (b.quality || 0) - (a.quality || 0);
+
+      case "year":
+        return (b.year || 0) - (a.year || 0);
+
+      default:
+        return 0;
+    }
+  });
+
+
   return (
     <div className="container">
       <h1 className="text-center mb-4">My Collection</h1>
+      <div className="d-flex justify-content-end mb-3">
+        <select
+          className="form-select w-auto"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="latest">Latest Added</option>
+          <option value="alphabetical">Alphabetical (A–Z)</option>
+          <option value="rating">Highest Rated</option>
+          <option value="year">Year Released</option>
+        </select>
+      </div>
+
 
       <div className="row g-4">
-        {comics.map((comic) => (
+        {sortedComics.map((comic) => (
+
           <div key={comic._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
             <div className="card shadow-sm h-100">
 
@@ -53,7 +92,7 @@ export default function ComicList() {
                   className="card-img-top"
                   alt={`${comic.title} cover`}
                   style={{
-                    objectFit: "contain",      
+                    objectFit: "contain",
                     height: "250px",
                     backgroundColor: "#f8f9fa",
                     padding: "8px"
