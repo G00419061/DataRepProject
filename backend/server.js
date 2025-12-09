@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import Comic from "./models/Comic.js";
+import Questions from "./models/Questions.js"
 
 const app = express();
 
@@ -65,6 +66,15 @@ app.put("/comics/:id", async (req, res) => {
     res.json(updatedComic);
   } catch (err) {
     res.status(400).json({ error: "Error updating comic" });
+  }
+});
+
+app.get("/quiz", async (req, res) => {
+  try{
+    const randomQuestions = await Questions.aggregate([{$sample: {size:10}}]);
+    res.json(randomQuestions);
+  }catch(err){
+    res.status(500).json({error: "Failed to load quiz questions"});
   }
 });
 
