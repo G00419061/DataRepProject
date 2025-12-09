@@ -9,7 +9,8 @@ export default function AddComic() {
     issue: "",
     publisher: "",
     year: "",
-    image: ""
+    image: "",
+    quality: 0
   });
 
   const handleChange = (e) => {
@@ -30,7 +31,7 @@ export default function AddComic() {
     };
 
     if (file) {
-      reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
     }
   };
 
@@ -54,7 +55,7 @@ export default function AddComic() {
       <h1 className="text-center mb-4">Add a New Comic</h1>
 
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
-        
+
         <div className="mb-3">
           <label className="form-label">Title</label>
           <input
@@ -73,7 +74,6 @@ export default function AddComic() {
             className="form-control"
             onChange={handleChange}
             min="0"
-            required
           />
         </div>
 
@@ -103,19 +103,44 @@ export default function AddComic() {
           <input
             type="file"
             accept="image/*"
-            capture="environment"   
+            capture="environment"
             className="form-control"
             onChange={handleImageUpload}
           />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Quality Rating</label>
+          <div className="star-rating" style={{ fontSize: "1.8rem", cursor: "pointer" }}>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span
+                key={i}
+                onClick={() => setFormData({ ...formData, quality: i + 1 })}
+                style={{ color: i < formData.quality ? "#ffc107" : "#e4e5e9" }}
+              >
+                ★
+              </span>
+            ))}
+          </div>
         </div>
 
         {formData.image && (
           <img
             src={formData.image}
             alt="Preview"
-            className="img-fluid mb-3 rounded"
-            style={{ maxHeight: "200px" }}
+            className="img-fluid mb-3"
+            style={{
+              maxHeight: "250px",
+              objectFit: "contain",
+              width: "100%",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "8px",
+              display: "block",
+              margin: "0 auto"
+            }}
           />
+
         )}
 
         <button className="btn btn-primary w-100" type="submit">

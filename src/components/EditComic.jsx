@@ -5,13 +5,7 @@ export default function EditComic() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    issue: "",
-    publisher: "",
-    year: "",
-    image: ""
-  });
+  const [formData, setFormData] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:5000/comics/${id}`)
@@ -19,6 +13,10 @@ export default function EditComic() {
       .then(data => setFormData(data))
       .catch(err => console.error("Error loading comic:", err));
   }, [id]);
+
+  if (!formData) {
+    return <h2 className="text-center mt-5">Loading comic...</h2>;
+  }
 
   const handleChange = (e) => {
     setFormData({
@@ -32,11 +30,9 @@ export default function EditComic() {
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.onloadend = () => {
       setFormData({ ...formData, image: reader.result });
     };
-
     reader.readAsDataURL(file);
   };
 
@@ -113,6 +109,21 @@ export default function EditComic() {
         </div>
 
         <div className="mb-3">
+          <label className="form-label">Quality Rating</label>
+          <div style={{ fontSize: "1.8rem", cursor: "pointer" }}>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <span
+                key={i}
+                onClick={() => setFormData({ ...formData, quality: i + 1 })}
+                style={{ color: i < formData.quality ? "#ffc107" : "#e4e5e9" }}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-3">
           <label className="form-label">Cover Image</label>
           <input
             type="file"
@@ -127,14 +138,35 @@ export default function EditComic() {
           <img
             src={formData.image}
             alt="Preview"
-            className="img-fluid mb-3 rounded"
-            style={{ maxHeight: "200px" }}
+            className="img-fluid mb-3"
+            style={{
+              maxHeight: "250px",
+              objectFit: "contain",
+              width: "100%",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              padding: "8px",
+              display: "block",
+              margin: "0 auto"
+            }}
           />
+
         )}
 
-        <button className="btn btn-primary w-100" type="submit">
-          Save Changes
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn btn-primary w-50" type="submit">
+            Save Changes
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-secondary w-50"
+            onClick={() => navigate("/")}>
+            Cancel
+          </button>
+        </div>
+
+
       </form>
     </div>
   );

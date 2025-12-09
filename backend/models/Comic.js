@@ -5,7 +5,8 @@ const ComicSchema = new mongoose.Schema({
   issue: Number,
   publisher: String,
   image: String,
-  year: Number
+  year: Number,
+  quality: { type: Number, default: 0 }
 });
 
 export default mongoose.model("Comic", ComicSchema, "comics");

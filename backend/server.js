@@ -45,16 +45,14 @@ app.delete("/comics/:id", async (req, res) =>{
   }
 });
 
-app.get("/comicd/:id", async (req, res) =>{
-  try{
-    const updated = await Comic.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.json(updated);
-  }catch(err){
-    console.error("Error updating comic:", err);
-    res.status (400).json({error: "Failed to update comic"});
+app.get("/comics/:id", async (req, res) => {
+  try {
+    const comic = await Comic.findById(req.params.id);
+    res.json(comic);
+  } catch (err) {
+    res.status(400).json({ error: "Comic not found" });
   }
 });
+
 
 app.listen(5000, () => console.log("Server running on port 5000"));

@@ -53,12 +53,13 @@ export default function ComicList() {
                   className="card-img-top"
                   alt={`${comic.title} cover`}
                   style={{
-                    objectFit: "cover",
+                    objectFit: "contain",      
                     height: "250px",
-                    borderTopLeftRadius: "0.25rem",
-                    borderTopRightRadius: "0.25rem"
+                    backgroundColor: "#f8f9fa",
+                    padding: "8px"
                   }}
                 />
+
               )}
 
               <div className="card-body">
@@ -69,6 +70,19 @@ export default function ComicList() {
                   <strong>Published Year:</strong> {comic.year} <br />
                   <strong>Publisher:</strong> {comic.publisher}
                 </p>
+
+                <div className="mt-2">
+                  <strong>Quality: </strong>
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <span
+                      key={i}
+                      style={{ color: i < comic.quality ? "#ffc107" : "#e4e5e9", fontSize: "1.4rem" }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
               </div>
 
               <div className="card-footer bg-trasparent border-0">
