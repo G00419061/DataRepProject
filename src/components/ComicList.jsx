@@ -18,7 +18,7 @@ export default function ComicList() {
       return;
     }
 
-    const res = await fetch(`http://localhost:5000/comics/${id}`, {
+    const res = await fetch(`http://localhost:4000/comics/${id}`, {
       method: "DELETE",
     });
 
@@ -30,7 +30,7 @@ export default function ComicList() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/comics")
+    fetch("http://localhost:4000/comics")
       .then((res) => res.json())
       .then((data) => {
         setComics(data);

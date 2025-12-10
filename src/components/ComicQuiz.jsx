@@ -13,7 +13,7 @@ export default function ComicQuiz() {
   const startQuiz = async () => {
     setLoading(true);
 
-    const res = await fetch("http://localhost:5000/quiz");
+    const res = await fetch("http://localhost:4000/quiz");
     const data = await res.json();
 
     setQuestions(data);

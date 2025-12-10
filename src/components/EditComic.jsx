@@ -8,7 +8,7 @@ export default function EditComic() {
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/comics/${id}`)
+    fetch(`http://localhost:4000/comics/${id}`)
       .then(res => res.json())
       .then(data => setFormData(data))
       .catch(err => console.error("Error loading comic:", err));
@@ -39,7 +39,7 @@ export default function EditComic() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(`http://localhost:5000/comics/${id}`, {
+    const res = await fetch(`http://localhost:4000/comics/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

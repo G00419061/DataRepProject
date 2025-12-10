@@ -38,7 +38,7 @@ export default function AddComic() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/comics", {
+    const res = await fetch("http://localhost:4000/comics", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
