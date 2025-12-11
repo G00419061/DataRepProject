@@ -56,7 +56,7 @@ export default function ComicList() {
         return (b.quality || 0) - (a.quality || 0);
 
       case "year":
-        return (b.year || 0) - (a.year || 0);
+        return  (a.year || 0) - (b.year || 0);
 
       default:
         return 0;
